@@ -37,15 +37,24 @@ function onClickGallery(event) {
     return;
   }
   const imageOrg = event.target.dataset.source;
-  const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(
+    `
   <img src="${imageOrg}" width="800" height="600">
-`);
+`,
+    {
+      onShow: () => {
+        document.addEventListener("keydown", onCloseModal);
+      },
+      onClose: () => {
+        document.removeEventListener(
+          "keydown",
+          onCloseModal
+        );
+      },
+    }
+  );
   instance.show();
 
-  galleryListElement.addEventListener(
-    "keydown",
-    onCloseModal
-  );
   function onCloseModal(evt) {
     if (evt.code !== "Escape") {
       return;
